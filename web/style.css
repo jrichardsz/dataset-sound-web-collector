@@ -1,0 +1,30 @@
+nav {
+  margin-bottom: 30px;
+}
+
+h2 {
+  border-bottom: 2px solid #E9ECEF;
+  padding-bottom: 7px;
+}
+
+img {
+  height: 191.04px;
+}
+
+body {
+  padding-bottom: 50px;
+}
+
+.col-lg-4 {
+  margin-top: 30px;
+}
+.card {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pagination {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
