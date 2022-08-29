@@ -106,11 +106,11 @@ function sendData(data, mlClassId) {
     var form = new FormData();
     var id = uuidv4();
     form.append('file', data, `${mlClassId}-${id}.wav`);
-    form.append('title', `${mlClassId}-${id}.wav`);
+    form.append('mlClassId', mlClassId);
     //Chrome inspector shows that the post data includes a file and a title.
     $.ajax({
         type: 'POST',
-        url: '/save-record',
+        url: `/save-record?mlClassId=${mlClassId}`,
         data: form,
         cache: false,
         processData: false,
