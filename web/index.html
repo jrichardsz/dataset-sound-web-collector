@@ -8,9 +8,9 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="css/main.css">
   <link href="https://res.cloudinary.com/finnhvman/raw/upload/matter/matter-0.2.2.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -38,29 +38,47 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Impetum</h5>
-            <button class="matter-button-contained button-mobile" id="startRecording">Play demo</button>
-            <button class="matter-button-contained button-mobile" id="startRecording">Start recording</button>
-            <button class="matter-button-contained button-mobile" id="stopRecording"  disabled>Stop recording</button>
+            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/impetum.wav">Play demo</button>
+            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
+              <img style="display:none" src='./loading_10.gif'/>
+            </button>
+            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="impetum"  disabled>Stop recording</button>
           </div>
         </div>
       </div>
       <div id="two" class="col-lg-4 col-md-6 col-sm-12">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Impetum</h5>
-            <button class="matter-button-contained button-mobile" id="startRecording">Play demo</button>
-            <button class="matter-button-contained button-mobile" id="startRecording">Start recording</button>
-            <button class="matter-button-contained button-mobile" id="stopRecording"  disabled>Stop recording</button>
+            <h5 class="card-title">Abite</h5>
+            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/abite.wav">Play demo</button>
+            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
+              <img style="display:none" src='./loading_10.gif'/>
+            </button>
+            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="abite"  disabled>Stop recording</button>
           </div>
         </div>
       </div>
       <div id="three" class="col-lg-4 col-md-6 col-sm-12">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Impetum</h5>
-            <button class="matter-button-contained button-mobile" id="startRecording">Play demo</button>
-            <button class="matter-button-contained button-mobile" id="startRecording">Start recording</button>
-            <button class="matter-button-contained button-mobile" id="stopRecording"  disabled>Stop recording</button>
+            <h5 class="card-title">Defendere</h5>
+            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/defendere.wav">Play demo</button>
+            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
+              <img style="display:none" src='./loading_10.gif'/>
+            </button>
+            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="defendere"  disabled>Stop recording</button>
+          </div>
+        </div>
+      </div>      
+      <div id="three" class="col-lg-4 col-md-6 col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Remedium</h5>
+            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/remedium.wav">Play demo</button>
+            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
+              <img style="display:none" src='./loading_10.gif'/>
+            </button>
+            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="remedium"  disabled>Stop recording</button>
           </div>
         </div>
       </div>
@@ -73,6 +91,9 @@
       <a href="#">JRichardsz</a>
     </footer>
   </div>
+
+
+  <script src="main.js"></script>
 </body>
 
 </html>

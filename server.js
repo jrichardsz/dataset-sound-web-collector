@@ -7,12 +7,13 @@ var staticAssets = new serveStatic(__dirname + "/web", {
 const fs = require("fs");
 var os = require('os');
 var path = require('path')
+var https = require('https')
 var xssEscape = require('xss-escape');
 const multer = require('multer');
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, os.tmpdir())
+    cb(null, process.env.storage_absolute_location || os.tmpdir())
   },
   filename: function(req, file, cb) {
     var originalname = xssEscape(file.originalname);
@@ -85,8 +86,11 @@ app.get('*', function(req, res, next) {
 
 });
 
+var options = {
+    key: fs.readFileSync(process.env.private_key_absolute_location),
+    cert: fs.readFileSync(process.env.certificate_absolute_location)
+};
 
-
-app.listen(port, function() {
-  console.log('Our app is running on port: ' + port);
+var server = https.createServer(options, app).listen(port, function(){
+  console.log("Express server listening on port " + port);
 });
