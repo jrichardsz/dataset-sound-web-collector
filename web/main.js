@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             audioChunks.push(e.data);
             if (rec.state == "inactive") {
                 let blob = new Blob(audioChunks, {
-                    type: 'audio/wav'
+                    type: 'audio/x-wav'
                 });
                 sendData(blob, currentMlClass);
             }

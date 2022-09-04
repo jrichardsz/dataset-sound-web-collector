@@ -10,15 +10,18 @@ var path = require('path')
 var https = require('https')
 var xssEscape = require('xss-escape');
 const multer = require('multer');
+const GoogleDriveHelper = require('./GoogleDriveHelper.js');
+const googleDriveHelper = new GoogleDriveHelper();
+googleDriveHelper.init()
 
-var datasetAbsoluteLocation = process.env.storage_absolute_location || os.tmpdir();
+var datasetAbsoluteLocation = process.env.STORAGE_ABSOLUTE_LOCATION || os.tmpdir();
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
         var mlClassId = xssEscape(req.query.mlClassId);
         fs.mkdir(path.join(datasetAbsoluteLocation, mlClassId), {
             recursive: true
-        }, (err) => {
+        }, async (err) => {
             if (err) throw err;
             cb(null, path.join(datasetAbsoluteLocation, mlClassId))
         });
@@ -59,11 +62,22 @@ if (process.env.ENABLE_SECURITY == "true") {
     }))
 }
 
-
-
-app.post('/save-record', upload.single('file'), function(req, res, next) {
+app.post('/save-record', upload.single('file'), async function(req, res, next) {
     const file = req.file;
     console.log(file);
+    console.log(req.query.mlClassId);
+    var clazz = xssEscape(req.query.mlClassId).toUpperCase();
+    var expectedGoogleDriveFolderId  = process.env[`ML_CLASS_${clazz}_GDRIVE_FOLDER_ID`];
+    if(typeof expectedGoogleDriveFolderId === 'undefined'){
+        console.log("unsupported class name: "+clazz)
+        expectedGoogleDriveFolderId = process.env['ML_CLASS_UNKNOWN_GDRIVE_FOLDER_ID'];
+    }
+
+    try{
+        googleDriveHelper.uploadFile(file.path, file.mimetype, file.originalname, expectedGoogleDriveFolderId);
+    }catch(err){
+        console.log(err)
+    }
     res.send("Ok");
 });
 
@@ -92,8 +106,8 @@ app.get('*', function(req, res, next) {
 });
 
 var options = {
-    key: fs.readFileSync(process.env.private_key_absolute_location),
-    cert: fs.readFileSync(process.env.certificate_absolute_location)
+    key: fs.readFileSync(process.env.PRIVATE_KEY_ABSOLUTE_LOCATION),
+    cert: fs.readFileSync(process.env.CERTIFICATE_ABSOLUTE_LOCATION)
 };
 
 var server = https.createServer(options, app).listen(port, function() {
