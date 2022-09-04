@@ -1,68 +1,38 @@
+var fs = require('fs');
 var express = require('express');
 var app = express();
 var serveStatic = require('serve-static')
 var staticAssets = new serveStatic(__dirname + "/web", {
     'index': ['default.html', 'default.htm']
 })
-const fs = require("fs");
-var os = require('os');
-var path = require('path')
 var https = require('https')
 var xssEscape = require('xss-escape');
-const multer = require('multer');
-const GoogleDriveHelper = require('./GoogleDriveHelper.js');
+
+const GoogleDriveHelper = require('./server/GoogleDriveHelper.js');
 const googleDriveHelper = new GoogleDriveHelper();
 googleDriveHelper.init()
 
-var datasetAbsoluteLocation = process.env.STORAGE_ABSOLUTE_LOCATION || os.tmpdir();
+const LocalStorageHelper = require('./server/LocalStorageHelper.js');
+const localStorageHelper = new LocalStorageHelper();
+localStorageHelper.init()
 
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        var mlClassId = xssEscape(req.query.mlClassId);
-        fs.mkdir(path.join(datasetAbsoluteLocation, mlClassId), {
-            recursive: true
-        }, async (err) => {
-            if (err) throw err;
-            cb(null, path.join(datasetAbsoluteLocation, mlClassId))
-        });
+const SecurityHelper = require('./server/SecurityHelper.js');
+const securityHelper = new SecurityHelper();
+securityHelper.init(app)
 
-
-    },
-    filename: function(req, file, cb) {
-        var originalname = xssEscape(file.originalname);
-        cb(null, originalname)
-    }
-})
-
-const upload = multer({
-    storage: storage
-});
 
 var variablesFolder = __dirname + "/variables";
 
-// set the port of our application
 var port = process.env.PORT || 2708;
 
-// set the view engine to ejs
 app.set('view engine', 'ejs');
 app.set('views', __dirname + "/web");
-// use .html instead .ejs
 app.engine('html', require('ejs').renderFile);
 
 /*Optional security*/
-if (process.env.ENABLE_SECURITY == "true") {
 
-    const basicAuth = require('express-basic-auth');
-    var userName = process.env.AUTH_USER;
-    var users = {};
-    users[userName] = process.env.AUTH_PASSWORD;
-    app.use(basicAuth({
-        users: users,
-        challenge: true
-    }))
-}
 
-app.post('/save-record', upload.single('file'), async function(req, res, next) {
+app.post('/save-record', localStorageHelper.getMiddleware().single('file'), async function(req, res, next) {
     const file = req.file;
     console.log(file);
     console.log(req.query.mlClassId);
