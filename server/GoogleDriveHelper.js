@@ -1,31 +1,43 @@
 const stream = require('stream');
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
+const fsExtra = require('fs-extra');
 const {
     google
 } = require('googleapis');
+const os = require("os");
 
 function GoogleDriveHelper() {
 
-    // service account key file from Google Cloud console.
-    const KEYFILEPATH = process.env.GOOGLE_DRIVE_SERVICE_ACCOUNT_FILE_LOCATION;
-
-    // Request full drive access.
-    const SCOPES = ['https://www.googleapis.com/auth/drive',
-        'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.appdata'
-    ];
-
-    // Create a service account initialize with the service account key file and scope needed
-    const auth = new google.auth.GoogleAuth({
-        keyFile: KEYFILEPATH,
-        scopes: SCOPES
-    });
-
-    auth.subject = 'user.account@domain.com';
+    const tempDir = os.tmpdir();
 
     this.driveService;
 
     this.init = async() => {
+
+        var serviceAccountFileLocation = process.env.GOOGLE_DRIVE_SERVICE_ACCOUNT_FILE_LOCATION ||  path.join(tempDir, "service_account_file.json");
+        var serviceAccountFileExist = await fsExtra.pathExists(serviceAccountFileLocation);
+
+        if (!serviceAccountFileExist) {
+            console.log("service_account_file.json don't exist. Creating...")
+            let decodedContent = Buffer.from(process.env.GOOGLE_DRIVE_SERVICE_ACCOUNT_FILE_CONTENT.toString('utf8'), 'base64').toString('ascii')
+            await fs.promises.writeFile(serviceAccountFileLocation, decodedContent, {
+                encoding: 'utf8'
+            });
+        }
+
+        // Request full drive access.
+        const scopes = ['https://www.googleapis.com/auth/drive',
+            'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.appdata'
+        ];
+
+        // Create a service account initialize with the service account key file and scope needed
+        const auth = new google.auth.GoogleAuth({
+            keyFile: serviceAccountFileLocation,
+            scopes: scopes
+        });
+
         this.driveService = await google.drive({
             version: 'v3',
             auth
@@ -33,7 +45,7 @@ function GoogleDriveHelper() {
     };
 
 
-    this.uploadFile = async(filePath, mimetype, originalname, expectedGoogleDriveFolderId) => {
+    this.uploadFile = async(filePath, mimetype, originalname, googleDriveFolderId) => {
         try {
             const {
                 data
@@ -44,13 +56,13 @@ function GoogleDriveHelper() {
                 },
                 requestBody: {
                     name: originalname,
-                    parents: [expectedGoogleDriveFolderId],
+                    parents: [googleDriveFolderId],
                 },
                 fields: 'id,name',
             });
             console.log(`Uploaded file ${data.name} ${data.id}`);
         } catch (err) {
-        	console.log(err);
+            console.log(err);
         }
     };
 

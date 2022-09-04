@@ -4,14 +4,15 @@
   "description": "web-dynamify",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "supervisor -e 'ejs|js|css|js|html|json'  server.js",
+    "start": "node index.js",
+    "dev": "supervisor -e 'ejs|js|css|js|html|json' index.js",
     "build": "echo \"build\""
   },
   "dependencies": {
     "ejs": "3.0.2",
     "express": "4.17.1",
     "express-basic-auth": "1.2.0",
+    "fs-extra": "^10.1.0",
     "googleapis": "^107.0.0",
     "multer": "^1.4.5-lts.1",
     "serve-static": "1.14.1",
