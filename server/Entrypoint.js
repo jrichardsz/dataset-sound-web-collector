@@ -4,6 +4,7 @@ const fsExtra = require('fs-extra')
 const express = require('express');
 const app = express();
 const https = require('https');
+const http = require('http');
 const LocalStorageHelper = require('./LocalStorageHelper.js');
 const SecurityHelper = require('./SecurityHelper.js');
 const HomePageRoute = require('./HomePageRoute.js');
@@ -18,33 +19,35 @@ function Entrypoint() {
 
     this.init = async() => {
 
-        var ppkLocation = process.env.PRIVATE_KEY_ABSOLUTE_LOCATION || path.join(tempDir, "private_key.pem")
-        var certLocation = process.env.CERTIFICATE_ABSOLUTE_LOCATION || path.join(tempDir, "cert.pem")
+        if (process.env.ENABLE_HTTPS === "true") {
+            var ppkLocation = process.env.PRIVATE_KEY_ABSOLUTE_LOCATION || path.join(tempDir, "private_key.pem")
+            var certLocation = process.env.CERTIFICATE_ABSOLUTE_LOCATION || path.join(tempDir, "cert.pem")
 
-        var ppkExist = await fsExtra.pathExists(ppkLocation);
-        var certExist = await fsExtra.pathExists(certLocation);
+            var ppkExist = await fsExtra.pathExists(ppkLocation);
+            var certExist = await fsExtra.pathExists(certLocation);
 
-        if (!ppkExist) {
-            console.log("ppk don't exist. Creating...")
-            let decodedContent = Buffer.from(process.env.PRIVATE_KEY_ABSOLUTE_CONTENT.toString('utf8'), 'base64').toString('ascii')
-            await fs.promises.writeFile(ppkLocation, decodedContent, {
-                encoding: 'utf8'
-            });
+            if (!ppkExist) {
+                console.log("ppk don't exist. Creating...")
+                let decodedContent = Buffer.from(process.env.PRIVATE_KEY_ABSOLUTE_CONTENT.toString('utf8'), 'base64').toString('ascii')
+                await fs.promises.writeFile(ppkLocation, decodedContent, {
+                    encoding: 'utf8'
+                });
+            }
+
+            if (!certExist) {
+                console.log("cert don't exist. Creating...")
+                let decodedContent = Buffer.from(process.env.CERTIFICATE_ABSOLUTE_CONTENT.toString('utf8'), 'base64').toString('ascii')
+                await fs.promises.writeFile(certLocation, decodedContent, {
+                    encoding: 'utf8'
+                });
+            }
+
+
+            options = {
+                key: await fs.promises.readFile(ppkLocation),
+                cert: await fs.promises.readFile(certLocation)
+            };
         }
-
-        if (!certExist) {
-            console.log("cert don't exist. Creating...")
-            let decodedContent = Buffer.from(process.env.CERTIFICATE_ABSOLUTE_CONTENT.toString('utf8'), 'base64').toString('ascii')            
-            await fs.promises.writeFile(certLocation, decodedContent, {
-                encoding: 'utf8'
-            });
-        }
-
-
-        options = {
-            key: await fs.promises.readFile(ppkLocation),
-            cert: await fs.promises.readFile(certLocation)
-        };
 
         const localStorageHelper = new LocalStorageHelper();
         localStorageHelper.init()
@@ -63,9 +66,16 @@ function Entrypoint() {
     };
 
     this.start = () => {
-        var server = https.createServer(options, app).listen(port, function() {
-            console.log("Express server listening on port " + port);
-        });
+
+        if (process.env.ENABLE_HTTPS === "true") {
+            https.createServer(options, app).listen(port, function() {
+                console.log("Express server listening on port " + port);
+            });
+        } else {
+            http.createServer(options, app).listen(port, function() {
+                console.log("Express server listening on port " + port);
+            });
+        }
     };
 
 }
