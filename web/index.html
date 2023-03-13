@@ -7,13 +7,39 @@
   <title>Dataset Sound Collector</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/main.css">
-  <link href="https://res.cloudinary.com/finnhvman/raw/upload/matter/matter-0.2.2.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://res.cloudinary.com/finnhvman/raw/upload/matter/matter-0.2.2.css" rel="stylesheet">  
 </head>
 
 <body>
+  
+  <div id="modal" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Audio was sent. Thanks!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
   <div class="header-container">
     <header class="wrapper clearfix">
       <h1 class="title">Dataset Sound Collector</h1>
@@ -25,19 +51,28 @@
     <div class="main wrapper clearfix">
 
       <p>Web site to collect sounds using the microphone and store them in a specific google drive folder</p>
-      <p>Choose one item and ear the expected sound</p>
-      <p>Click on record button and send the audtio</p>
-      <button class="matter-button-contained">Lear more</button>
+
+      <h4>Steps</h4>
+
+      <ul>
+        <li>Click on "Play Demo" to ear the expected word or sentence</li>
+        <li>Memorize it. You can play the demo as much as you need</li>
+        <li>Click on "Start recording" button and and pronounce the word or sentence</li>
+        <li>Click on "Stop recording" button to finalize</li>
+        <li>Go to the next section</li>
+      </ul>
+
+      <p>To improve the accuracy of training, please try to do it a silent place and pronouncing only the expected word or sentence</p>
 
     </div>
   </div>
 
   <div class="container">
     <div class="row">
-      <div id="one" class="col-lg-4 col-md-6 col-sm-12">
+      <div id="one" class="col-lg-4 col-md-6 col-sm-12 mb-3">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Impetum</h5>
+            <h5 class="card-title center">Impetum</h5>
             <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/impetum.wav">Play demo</button>
             <button class="matter-button-contained button-mobile" type="startRecording">Start recording
               <img style="display:none" src='./images/loading_10.gif'/>
@@ -46,10 +81,10 @@
           </div>
         </div>
       </div>
-      <div id="two" class="col-lg-4 col-md-6 col-sm-12">
+      <div id="two" class="col-lg-4 col-md-6 col-sm-12 mb-3">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Abite</h5>
+            <h5 class="card-title center">Abite</h5>
             <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/abite.wav">Play demo</button>
             <button class="matter-button-contained button-mobile" type="startRecording">Start recording
               <img style="display:none" src='./images/loading_10.gif'/>
@@ -58,10 +93,10 @@
           </div>
         </div>
       </div>
-      <div id="three" class="col-lg-4 col-md-6 col-sm-12">
+      <div id="three" class="col-lg-4 col-md-6 col-sm-12 mb-3">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Defendere</h5>
+            <h5 class="card-title center">Defendere</h5>
             <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/defendere.wav">Play demo</button>
             <button class="matter-button-contained button-mobile" type="startRecording">Start recording
               <img style="display:none" src='./images/loading_10.gif'/>
@@ -70,10 +105,10 @@
           </div>
         </div>
       </div>      
-      <div id="three" class="col-lg-4 col-md-6 col-sm-12">
+      <div id="three" class="col-lg-4 col-md-6 col-sm-12 mb-3">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Remedium</h5>
+            <h5 class="card-title center">Remedium</h5>
             <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/remedium.wav">Play demo</button>
             <button class="matter-button-contained button-mobile" type="startRecording">Start recording
               <img style="display:none" src='./images/loading_10.gif'/>

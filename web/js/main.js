@@ -100,6 +100,7 @@ function onStopRecordingListener(ev) {
     startRecordingButton.attr("disabled", false);
 
     rec.stop();
+    $("#modal").modal();
 }
 
 function sendData(data, mlClassId) {
