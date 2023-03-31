@@ -1,26 +1,33 @@
 var xssEscape = require('xss-escape');
 const GoogleDriveHelper = require('../server/GoogleDriveHelper.js');
 
-function UploadRoute() {
+function UploadRoute(settings) {
 
     const googleDriveHelper = new GoogleDriveHelper();
     googleDriveHelper.init()
 
-    this.getRoute = (req, res, next) => {
+    this.performUpload = (req, res, next) => {
         const file = req.file;
         console.log(file);
-        console.log(req.query.mlClassId);
-        var clazz = xssEscape(req.query.mlClassId).toUpperCase();
-        var expectedGoogleDriveFolderId = process.env[`ML_CLASS_${clazz}_GDRIVE_FOLDER_ID`];
+        console.log(req.query);
+
+        var clazz = xssEscape(req.query.mlClassId);
+        var uuidCampaign = xssEscape(req.query.uuidCampaign);
+
+        if(typeof settings[uuidCampaign] === 'undefined'){
+           return res.send("unknown uuidCampaign");
+        }
+
+        var expectedGoogleDriveFolderId = settings[uuidCampaign].gdriveIdByMlClass[clazz];
         if (typeof expectedGoogleDriveFolderId === 'undefined') {
             console.log("unsupported class name: " + clazz)
-            expectedGoogleDriveFolderId = process.env['ML_CLASS_UNKNOWN_GDRIVE_FOLDER_ID'];
+            expectedGoogleDriveFolderId = settings[uuidCampaign].gdriveIdByMlClass.unknown;
         }
 
         try {
             googleDriveHelper.uploadFile(file.path, file.mimetype, file.originalname, expectedGoogleDriveFolderId);
         } catch (err) {
-            console.log(err)
+            return res.send(err);
         }
         res.send("Ok");
     };

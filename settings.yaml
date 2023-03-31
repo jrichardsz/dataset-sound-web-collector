@@ -1,0 +1,24 @@
+samples:
+ 4_spells:
+    - title: affirmative
+      demoSoundUrl: https://www.101soundboards.com/storage/board_sounds_rendered/182535.mp3
+      mlClass: affirmative
+    - title: add-on complete
+      demoSoundUrl: https://www.101soundboards.com/storage/board_sounds_rendered/182019.mp3
+      mlClass: add_on_complete
+    - title: battle cruiser operational
+      demoSoundUrl: https://www.101soundboards.com/storage/board_sounds_rendered/182272.mp3
+      mlClass: battle_cruiser_operational
+    - title: goliath online
+      demoSoundUrl: https://www.101soundboards.com/storage/board_sounds_rendered/182049.mp3
+      mlClass: goliath_online
+
+9cb90dfe-1acc-4adc-8857-44f3a9e0f038:
+  alias: initial campaign
+  samplesKey: 4_spells
+
+  gdriveIdByMlClass:
+    affirmative: 70c4c835-d260-4c61-ba77-5774bf2c63a8
+    add_on_complete: ebead4a5-e231-479f-a39c-da50451d52fb
+    battle_cruiser_operational: 8993f26c-b0da-4d77-9b04-0db213a37657
+    goliath_online: d37706fd-b6fc-45fa-9cef-af671505af00

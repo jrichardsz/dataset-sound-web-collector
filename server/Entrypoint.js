@@ -10,14 +10,19 @@ const SecurityHelper = require('./SecurityHelper.js');
 const HomePageRoute = require('./HomePageRoute.js');
 const UploadRoute = require('./UploadRoute.js');
 const os = require("os");
+const yaml = require('js-yaml');
 
 function Entrypoint() {
 
     var port = process.env.PORT || 2708;
     var options;
     const tempDir = os.tmpdir();
+    var settings;
 
     this.init = async() => {
+
+        settings = yaml.load(fs.readFileSync(process.env.CUSTOM_SETTINGS_LOCATION || path.join(process.env.npm_config_local_prefix, "settings.yaml"), 'utf8'));
+        console.log(settings);        
 
         if (process.env.ENABLE_HTTPS === "true") {
             var ppkLocation = process.env.PRIVATE_KEY_ABSOLUTE_LOCATION || path.join(tempDir, "private_key.pem")
@@ -55,12 +60,12 @@ function Entrypoint() {
         const securityHelper = new SecurityHelper();
         securityHelper.init(app)
 
-        const homePageRoute = new HomePageRoute();
+        const homePageRoute = new HomePageRoute(settings);
         await homePageRoute.init(app)
 
-        const uploadRoute = new UploadRoute();
+        const uploadRoute = new UploadRoute(settings);
 
-        app.post('/save-record', localStorageHelper.getMiddleware().single('file'), uploadRoute.getRoute);
+        app.post('/upload', localStorageHelper.getMiddleware().single('file'), uploadRoute.performUpload);
 
         app.get('*', homePageRoute.getRoute);
     };

@@ -2,6 +2,13 @@ var rec;
 var audioChunks;
 var currentMlClass;
 
+const urlParams = new URLSearchParams(window.location.search);
+const uuidCampaign = urlParams.get('uuidCampaign');
+if(typeof uuidCampaign === 'undefined' || uuidCampaign == null){
+    $("#uuidIsRequired").modal();    
+    throw new Error("uuid campaign is required");
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
     initializeListeners();
 
@@ -63,8 +70,14 @@ function initializeListeners() {
 
 
 function onPlayListener(ev) {
-    var relativeSoundUrl = $(ev.target).attr("sound");
-    var fullUrl = window.location + relativeSoundUrl;
+    var rawSoundUrl = $(ev.target).attr("sound");
+    var fullUrl;
+    if(rawSoundUrl.startsWith(".")){
+        fullUrl = getLocationBasePath() + rawSoundUrl.substring(1);
+    }else{
+        fullUrl = rawSoundUrl;
+    }    
+    //@todo optimize this to avoid same create the same instance on each click 
     var snd = new Audio(fullUrl);
     snd.play();
 }
@@ -107,11 +120,11 @@ function sendData(data, mlClassId) {
     var form = new FormData();
     var id = uuidv4();
     form.append('file', data, `${mlClassId}-${id}.wav`);
-    form.append('mlClassId', mlClassId);
+    form.append('mlClassId', mlClassId);    
     //Chrome inspector shows that the post data includes a file and a title.
     $.ajax({
         type: 'POST',
-        url: `/save-record?mlClassId=${mlClassId}`,
+        url: `/upload?mlClassId=${mlClassId}&uuidCampaign=${uuidCampaign}`,
         data: form,
         cache: false,
         processData: false,
@@ -127,3 +140,22 @@ function uuidv4() {
         return v.toString(16);
     });
 }
+
+function getLocationBasePath() {
+    
+    if (typeof window === "undefined") {
+      console.error("ReferenceError: window is not defined. Are you in frontend javascript layer?");
+      return;
+    }
+    
+    if (typeof window.location === "undefined") {
+      console.error("ReferenceError: window.location is not defined. Are you in frontend javascript layer?");
+      return;
+    }
+    
+    if(window.location.port){
+      return window.location.protocol+"//"+window.location.hostname+":"+window.location.port
+    }else {
+      return window.location.protocol+"//"+window.location.hostname
+    }
+  }

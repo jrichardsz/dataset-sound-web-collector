@@ -38,13 +38,31 @@
       </div>
     </div>
   </div>
+
+  <div id="uuidIsRequired" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          uuid campaign was not found. Contact the administrator
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>  
   
 
   <div class="header-container">
     <header class="wrapper clearfix">
       <h1 class="title">Dataset Sound Collector</h1>
     </header>
-
   </div>
 
   <div class="main-container">
@@ -69,54 +87,23 @@
 
   <div class="container">
     <div class="row">
-      <div id="one" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title center">Impetum</h5>
-            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/impetum.wav">Play demo</button>
-            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
-              <img style="display:none" src='./images/loading_10.gif'/>
-            </button>
-            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="impetum"  disabled>Stop recording</button>
-          </div>
-        </div>
-      </div>
-      <div id="two" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title center">Abite</h5>
-            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/abite.wav">Play demo</button>
-            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
-              <img style="display:none" src='./images/loading_10.gif'/>
-            </button>
-            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="abite"  disabled>Stop recording</button>
-          </div>
-        </div>
-      </div>
-      <div id="three" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title center">Defendere</h5>
-            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/defendere.wav">Play demo</button>
-            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
-              <img style="display:none" src='./images/loading_10.gif'/>
-            </button>
-            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="defendere"  disabled>Stop recording</button>
-          </div>
-        </div>
-      </div>      
-      <div id="three" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title center">Remedium</h5>
-            <button class="matter-button-contained button-mobile" type="playDemo" sound="sounds/remedium.wav">Play demo</button>
-            <button class="matter-button-contained button-mobile" type="startRecording">Start recording
-              <img style="display:none" src='./images/loading_10.gif'/>
-            </button>
-            <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="remedium"  disabled>Stop recording</button>
-          </div>
-        </div>
-      </div>
+
+      <% if (typeof samples !== 'undefined' &&  samples.length > 0){%>
+            <%  for (let sample of samples){ %>
+              <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title center"><%= sample.title %> </h5>
+                    <button class="matter-button-contained button-mobile" type="playDemo" sound="<%= sample.demoSoundUrl %>">Play demo</button>
+                    <button class="matter-button-contained button-mobile" type="startRecording">Start recording
+                      <img style="display:none" src='./images/loading_10.gif'/>
+                    </button>
+                    <button class="matter-button-contained button-mobile" type="stopRecording" mlClass="<%= sample.mlClass %>"  disabled>Stop recording</button>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+      <%}%>      
     </div>
   </div>
 
