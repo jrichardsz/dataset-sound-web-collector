@@ -1,12 +1,12 @@
 {
-  "name": "web-dynamify",
-  "version": "1.0.1",
-  "description": "web-dynamify",
+  "name": "dataset-sound-collector",
+  "version": "1.0.0",
+  "description": "dataset-sound-collector",
   "main": "server.js",
   "scripts": {
     "start": "node index.js",
     "dev": "supervisor -e 'ejs|js|css|js|html|json' index.js",
-    "build": "echo \"build\""
+    "build": "echo \"not build required\""
   },
   "dependencies": {
     "ejs": "3.0.2",
