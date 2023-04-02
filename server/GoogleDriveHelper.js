@@ -63,6 +63,7 @@ function GoogleDriveHelper() {
             console.log(`Uploaded file ${data.name} ${data.id}`);
         } catch (err) {
             console.log(err);
+            throw err;
         }
     };
 

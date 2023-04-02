@@ -24,6 +24,11 @@ function HomePageRoute(settings) {
             }
 
             let uuidData = settings[xssEscape(req.query.uuidCampaign)];
+
+            if(typeof uuidData === 'undefined'){
+                return res.render('index.html', {});    
+            }
+
             let samplesKey = uuidData.samplesKey
             return res.render('index.html', {
                 alias: uuidData.alias,

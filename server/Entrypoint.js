@@ -33,7 +33,7 @@ function Entrypoint() {
 
             if (!ppkExist) {
                 console.log("ppk don't exist. Creating...")
-                let decodedContent = Buffer.from(process.env.PRIVATE_KEY_ABSOLUTE_CONTENT.toString('utf8'), 'base64').toString('ascii')
+                let decodedContent = Buffer.from(process.env.PRIVATE_KEY_CONTENT.toString('utf8'), 'base64').toString('ascii')
                 await fs.promises.writeFile(ppkLocation, decodedContent, {
                     encoding: 'utf8'
                 });
@@ -41,7 +41,7 @@ function Entrypoint() {
 
             if (!certExist) {
                 console.log("cert don't exist. Creating...")
-                let decodedContent = Buffer.from(process.env.CERTIFICATE_ABSOLUTE_CONTENT.toString('utf8'), 'base64').toString('ascii')
+                let decodedContent = Buffer.from(process.env.CERTIFICATE_CONTENT.toString('utf8'), 'base64').toString('ascii')
                 await fs.promises.writeFile(certLocation, decodedContent, {
                     encoding: 'utf8'
                 });

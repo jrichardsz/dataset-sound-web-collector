@@ -1,8 +1,17 @@
-# dataset sound collector
+<h1 align="center">dataset sound web collector</h1>
 
-Simple web to collect sounds and store them into disk and google drive
+<p align="center">Simple web to collect sounds and store them into disk and google drive</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/3322836/229368014-6e42de35-31e6-45f7-99a7-4ef5970d83ca.png" width=400>
+</p>
 
 ---
+
+## Goal
+
+If you are working with sounds or voices, the dataset don't exist and you need to collect them from people using its microphone (web or laptop), this web application is for you.
+
 
 ## Requirements
 
@@ -73,7 +82,7 @@ npm run start
 
 ---
 
-## Open the sound collector
+## Open the web sound collector
 
 Go to your web browser and open this:
 
@@ -87,11 +96,12 @@ Ready to listen the demo and send the recording to your google drive
 
 ---
 
-## Technologies
+## Technologies & assets
 
 - nodejs
 - google drive
 - https://github.com/finnhvman/matter
+- https://www.fonts4free.net/sword-art-online-font.html
 
 ---
 ## Roadmap

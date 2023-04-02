@@ -9,6 +9,9 @@ if(typeof uuidCampaign === 'undefined' || uuidCampaign == null){
     throw new Error("uuid campaign is required");
 }
 
+validateCollaboration();
+updateSentClassesColor();
+
 document.addEventListener("DOMContentLoaded", function(event) {
     initializeListeners();
 
@@ -66,8 +69,10 @@ function initializeListeners() {
 
         idCount++;
     })
-}
 
+    $("#choiceModalYesButton").click(onChoiceModalYesActionListener);
+    
+}
 
 function onPlayListener(ev) {
     var rawSoundUrl = $(ev.target).attr("sound");
@@ -113,7 +118,7 @@ function onStopRecordingListener(ev) {
     startRecordingButton.attr("disabled", false);
 
     rec.stop();
-    $("#modal").modal();
+    //$("#audioSuccessSentModal").modal();
 }
 
 function sendData(data, mlClassId) {
@@ -130,8 +135,92 @@ function sendData(data, mlClassId) {
         processData: false,
         contentType: false
     }).done(function(data) {
-        console.log(data);
+        console.log("server response: "+data);
+        showMessage("Audio was received. Thanks!!!");
+        //mark the sentence as "already sent"
+        $(`#${mlClassId}`).css('background-color', 'greenyellow'); 
+        markClassAsSent(mlClassId);
+        validateCollaboration();
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+        showMessage("There was an error while audio was being sent. Contact the administrator: "+
+        jqXHR.responseText);
     });
+}
+
+function showMessage(text) {
+    $("#audioSuccessSentModal #modalMessage").text(text);
+    $("#audioSuccessSentModal").modal();
+}
+
+function showChoiceMessage(text) {
+    $("#choiceModal #modalMessage").text(text);
+    $("#choiceModal").modal();
+}
+
+function markClassAsSent(classId) {
+    var datasourceString = localStorage.getItem("datasource");
+    var datasource = JSON.parse(datasourceString);
+    if(!datasource){
+        datasource ={sentClasses: {}};
+    }
+    datasource.sentClasses[classId] = true;
+    localStorage.setItem("datasource",JSON.stringify(datasource));
+}
+
+function validateCollaboration() {
+    var allCount=0;
+    var alreadySentCount=0;
+    for(card of $(".card")){
+        allCount++;
+        if(!card.style) continue;
+        if(!card.style["background-color"]) continue;
+        alreadySentCount++;
+    }
+
+    if(allCount === 0){
+        showMessage("There are not any configured sound sample. \n Check the uuidCampaign or contact the administrator");
+        return;
+    }    
+    
+    if(allCount === alreadySentCount){
+        showChoiceMessage("You already collaborated with all the sounds. \n Would you like to collaborate again?");
+    }
+}
+
+/*
+Clear all divs background color to mark them as "not collaborated"
+*/
+function onChoiceModalYesActionListener(ev){
+    for(card of $(".card")){        
+        $(card).css('background-color', '');
+    }
+    var datasource = {sentClasses: {}};
+    localStorage.setItem("datasource", JSON.stringify(datasource));
+}
+
+
+function updateSentClassesColor() {
+    var datasourceString = localStorage.getItem("datasource");    
+    if(!datasourceString){
+        return;
+    }
+
+    try {
+        var datasource = JSON.parse(datasourceString);
+        console.log(datasource);
+
+        for(clazz in datasource.sentClasses){
+            if(datasource.sentClasses[clazz] === false)continue;
+            $(`#${clazz}`).css('background-color', 'greenyellow');
+        }
+        
+    } catch (error) {
+        var datasource ={sentClasses: {}};
+        localStorage.setItem("datasource",JSON.stringify(datasource));
+    }
 }
 
 function uuidv4() {

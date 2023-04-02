@@ -6,7 +6,7 @@ function UploadRoute(settings) {
     const googleDriveHelper = new GoogleDriveHelper();
     googleDriveHelper.init()
 
-    this.performUpload = (req, res, next) => {
+    this.performUpload = async (req, res, next) => {
         const file = req.file;
         console.log(file);
         console.log(req.query);
@@ -25,9 +25,9 @@ function UploadRoute(settings) {
         }
 
         try {
-            googleDriveHelper.uploadFile(file.path, file.mimetype, file.originalname, expectedGoogleDriveFolderId);
+            await googleDriveHelper.uploadFile(file.path, file.mimetype, file.originalname, expectedGoogleDriveFolderId);
         } catch (err) {
-            return res.send(err);
+            return res.status(500).send(JSON.stringify(err.errors));
         }
         res.send("Ok");
     };
